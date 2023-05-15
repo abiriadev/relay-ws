@@ -1,0 +1,31 @@
+{
+	"printWidth": 60,
+	"tabWidth": 4,
+	"useTabs": true,
+	"semi": false,
+	"singleQuote": true,
+	"trailingComma": "all",
+	"bracketSpacing": true,
+	"arrowParens": "avoid",
+	"proseWrap": "always",
+	"htmlWhitespaceSensitivity": "ignore",
+	"endOfLine": "lf",
+	"vueIndentScriptAndStyle": true,
+	"overrides": [
+		{
+			"files": ["*.yaml", "*.yml"],
+			"options": {
+				"tabWidth": 2
+			}
+		},
+		{
+			"files": ".swcrc",
+			"options": {
+				"parser": "json",
+				"tabWidth": 4
+			}
+		}
+	],
+	"plugins": ["@prettier/plugin-xml"],
+	"xmlWhitespaceSensitivity": "ignore"
+}

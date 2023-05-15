@@ -1,0 +1,21 @@
+{
+	"$schema": "https://json.schemastore.org/tsconfig",
+	"compilerOptions": {
+		"incremental": true,
+		"target": "es2022",
+		"esModuleInterop": true,
+		"module": "ES6",
+		"paths": {
+			"@/*": ["./src/*"]
+		},
+		"declaration": true,
+		"declarationMap": false,
+		"outDir": "dist",
+		"forceConsistentCasingInFileNames": true,
+		"strict": true,
+		"noFallthroughCasesInSwitch": true,
+		"skipLibCheck": true,
+		"moduleResolution": "nodenext"
+	},
+	"include": ["src"]
+}

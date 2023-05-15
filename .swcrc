@@ -1,0 +1,17 @@
+{
+	"$schema": "https://json.schemastore.org/swcrc",
+	"jsc": {
+		"parser": {
+			"syntax": "typescript"
+		},
+		"target": "es2022",
+		"keepClassNames": true,
+		"paths": {
+			"@/*": ["./src/*"]
+		}
+	},
+	"module": {
+		"type": "es6"
+	},
+	"sourceMaps": true
+}
