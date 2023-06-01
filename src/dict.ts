@@ -2,20 +2,16 @@ import WebSocket from 'ws'
 import { nanoid } from 'nanoid'
 import { Wsid } from './types.js'
 
-const n2st = (n: number) => {
-	switch (n) {
-		case WebSocket.CONNECTING:
-			return 'CONNECTING'
-		case WebSocket.OPEN:
-			return 'OPEN'
-		case WebSocket.CLOSING:
-			return 'CLOSING'
-		case WebSocket.CLOSED:
-			return 'CLOSED'
-		default:
-			throw new Error(`${n} is not a valid state`)
-	}
-}
+const n2st = (n: number) =>
+	({
+		[WebSocket.CONNECTING]: 'CONNECTING',
+		[WebSocket.OPEN]: 'OPEN',
+		[WebSocket.CLOSING]: 'CLOSING',
+		[WebSocket.CLOSED]: 'CLOSED',
+	}[n] ??
+	(() => {
+		throw new Error(`${n} is not a valid state`)
+	})())
 
 export class Dict {
 	#d: Map<Wsid, WebSocket> = new Map()

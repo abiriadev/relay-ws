@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-const wsidZ = z.string().length(21)
+const wsidZ = z.string().length(21).or(z.literal('*'))
 
 export type Wsid = z.infer<typeof wsidZ>
 

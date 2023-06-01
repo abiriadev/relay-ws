@@ -50,6 +50,11 @@ wss.on('connection', ws => {
 				omitType,
 			)
 
+			if (toid === '*')
+				return dict.forEach(ws =>
+					ws.send(JSON.stringify(msg)),
+				)
+
 			const to = dict.get(toid)
 			if (to === null)
 				throw new Error(
