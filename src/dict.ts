@@ -80,4 +80,8 @@ export class Dict {
 			{},
 		)
 	}
+
+	forEach(p: (ws: WebSocket, id: Wsid) => void) {
+		this.#d.forEach(p)
+	}
 }

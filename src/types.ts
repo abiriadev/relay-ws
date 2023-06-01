@@ -1,22 +1,45 @@
 import { z } from 'zod'
 
-export type Wsid = string
+const wsidZ = z.string().length(21)
 
-const zls = z.object({
-	type: z.literal('ls'),
-})
+export type Wsid = z.infer<typeof wsidZ>
 
 const zsdp = z.object({
-	type: z.enum(['ice', 'offer', 'answer']),
-	from: z.string().length(21).optional(),
-	to: z.string().length(21),
+	from: wsidZ.optional(),
+	to: wsidZ,
 	sdp: z.string(),
 })
 
-export const reqSchema = zls.or(zsdp)
+export const reqZ = z.discriminatedUnion('type', [
+	z.object({ type: z.literal('ls') }),
+	z.object({ type: z.literal('leave') }),
+	zsdp.extend({ type: z.literal('ice') }),
+	zsdp.extend({ type: z.literal('offer') }),
+	zsdp.extend({ type: z.literal('answer') }),
+])
 
-export type Req = z.infer<typeof reqSchema>
+export type Req = z.infer<typeof reqZ>
 
-export type Res =
-	| { type: 'ls'; peers: Array<Wsid> }
-	| Required<z.infer<typeof zsdp>>
+export type Router = {
+	[K in Req['type']]: (
+		id: Wsid,
+		req: Omit<
+			Req extends { type: infer I }
+				? I extends K
+					? Req
+					: never
+				: never,
+			'type'
+		>,
+	) => [
+		({
+			ls: { peers: Array<Wsid> }
+			leave: { from: Wsid }
+		} & {
+			[K in 'ice' | 'offer' | 'answer']: Required<
+				z.infer<typeof zsdp>
+			>
+		})[K],
+		Wsid,
+	]
+}

@@ -1,23 +1,25 @@
-import { WebSocketServer } from 'ws'
+import { WebSocketServer, WebSocket } from 'ws'
 import destr from 'destr'
 import signale from 'signale'
 import chalk from 'chalk'
 import { Dict } from './dict.js'
-import { Req, Res, Wsid, reqSchema } from './types.js'
-import { env } from 'node:process'
+import { Req, Router, Wsid, reqZ } from './types.js'
+import process, { env, exit } from 'node:process'
 
 const dict = new Dict()
 
-const mid = (req: Req, id: Wsid): [Res, Wsid] =>
-	req.type === 'ls'
-		? [
-				{
-					type: 'ls',
-					peers: dict.ids_without_id(id),
-				},
-				id,
-		  ]
-		: [{ ...req, from: id }, req.to]
+const sdpHandler: Router['ice'] = (from, { sdp, to }) => [
+	{ sdp, to, from },
+	to,
+]
+
+const mid: Router = {
+	ls: id => [{ peers: dict.ids_without_id(id) }, id],
+	leave: from => [{ from }, '*'],
+	ice: sdpHandler,
+	offer: sdpHandler,
+	answer: sdpHandler,
+}
 
 const poru = env['PORT']
 const port = poru === undefined ? 34098 : parseInt(poru)
@@ -37,11 +39,16 @@ wss.on('connection', ws => {
 			const j = destr(data.toString())
 			console.log('recv: ', j)
 
-			const r = reqSchema.safeParse(j)
+			const r = reqZ.safeParse(j)
 			if (!r.success)
 				return signale.error(r.error.format())
 
-			const [msg, toid] = mid(r.data, id)
+			const { type, ...omitType } = r.data
+			const [msg, toid] = mid[r.data.type](
+				id,
+				// @ts-ignore
+				omitType,
+			)
 
 			const to = dict.get(toid)
 			if (to === null)
@@ -81,3 +88,16 @@ wss.on('error', () =>
 wss.on('listening', () =>
 	signale.await(`listening for connection at ${port}`),
 )
+
+process.on('SIGINT', () => {
+	signale.info('closing existing connections')
+	dict.forEach(
+		(socket, id) =>
+			socket.readyState == WebSocket.OPEN &&
+			(socket.close(1000, 'Server shutdown'),
+			signale.info(`closing ${id}`)),
+	)
+	wss.close()
+	signale.complete('shutdown successfully')
+	exit(0)
+})
