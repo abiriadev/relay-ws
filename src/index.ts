@@ -94,7 +94,7 @@ wss.on('listening', () =>
 	signale.await(`listening for connection at ${port}`),
 )
 
-process.on('SIGINT', () => {
+const shutdownHandle = () => {
 	signale.info('closing existing connections')
 	dict.forEach(
 		(socket, id) =>
@@ -105,4 +105,7 @@ process.on('SIGINT', () => {
 	wss.close()
 	signale.complete('shutdown successfully')
 	exit(0)
-})
+}
+
+process.on('SIGINT', shutdownHandle)
+process.on('SIGTERM', shutdownHandle)
