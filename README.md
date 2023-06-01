@@ -87,7 +87,7 @@ $ pnpm run
 
 | Name | Type      |
 | ---- | --------- |
-| type | `"offer"` |
+| type | `"answer"` |
 | to   | `ID`      |
 | sdp  | `string`  |
 
@@ -95,7 +95,7 @@ $ pnpm run
 
 | Name | Type      |
 | ---- | --------- |
-| type | `"offer"` |
+| type | `"answer"` |
 | from | `ID`      |
 | to   | `ID`      |
 | sdp  | `string`  |
@@ -106,7 +106,7 @@ $ pnpm run
 
 | Name | Type      |
 | ---- | --------- |
-| type | `"offer"` |
+| type | `"ice"` |
 | to   | `ID`      |
 | sdp  | `string`  |
 
@@ -114,7 +114,7 @@ $ pnpm run
 
 | Name | Type      |
 | ---- | --------- |
-| type | `"offer"` |
+| type | `"ice"` |
 | from | `ID`      |
 | to   | `ID`      |
 | sdp  | `string`  |
