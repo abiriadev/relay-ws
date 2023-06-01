@@ -1,0 +1,6 @@
+services:
+  server:
+    build: .
+    restart: always
+    ports:
+      - 34098:34098
