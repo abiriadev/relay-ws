@@ -27,7 +27,7 @@ $ docker compose up -d
 $ corepack enable
 $ pnpm install
 $ pnpm build
-$ pnpm run
+$ pnpm run start
 ```
 
 ## How relay server works
