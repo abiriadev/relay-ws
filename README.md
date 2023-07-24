@@ -1,6 +1,6 @@
 # Relay-WS
 
-> **Warning** \
+> [!WARNING] \
 > This project is neither stable nor actively developed.
 
 Simple and minimalistic WebRTC signalling server based on
