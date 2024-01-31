@@ -6,6 +6,7 @@
 		},
 		"target": "es2022",
 		"keepClassNames": true,
+		"baseUrl": ".",
 		"paths": {
 			"@/*": ["./src/*"]
 		}
